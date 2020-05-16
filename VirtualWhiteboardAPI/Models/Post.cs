@@ -9,6 +9,6 @@ namespace VirtualWhiteboardAPI.Models
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public string Content { get; set; }
-        public Person PostedBy { get; set; }
+        public User PostedBy { get; set; }
     }
 }

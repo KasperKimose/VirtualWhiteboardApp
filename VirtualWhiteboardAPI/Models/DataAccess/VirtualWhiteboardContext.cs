@@ -2,7 +2,7 @@
 
 namespace VirtualWhiteboardAPI.Models.DataAccess
 {
-    class VirtualWhiteboardContext : DbContext
+    public class VirtualWhiteboardContext : DbContext
     {
         public VirtualWhiteboardContext(DbContextOptions<VirtualWhiteboardContext> options) : base(options)
         {
@@ -10,7 +10,7 @@ namespace VirtualWhiteboardAPI.Models.DataAccess
         }
 
         public DbSet<Team> Teams { get; set; }
-        public DbSet<Person> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Whiteboard> Whiteboards { get; set; }
     }
