@@ -18,10 +18,7 @@ namespace VirtualWhiteboardAPI.Controllers
     {
         private readonly IWhiteboardService _whiteboardService;
 
-
-        public WhiteboardController(
-            IWhiteboardService whiteboardService
-            )
+        public WhiteboardController(IWhiteboardService whiteboardService)
         {
             _whiteboardService = whiteboardService;
         }
@@ -29,8 +26,8 @@ namespace VirtualWhiteboardAPI.Controllers
         [HttpPost]
         public IActionResult Post(PostDTO postDTO)
         {
-            _whiteboardService.CreatePost(User.Claims, postDTO);
-            return Ok();
+            var post = _whiteboardService.CreatePost(User.Claims, postDTO);
+            return Ok(post.Id);
         }
     }
 }

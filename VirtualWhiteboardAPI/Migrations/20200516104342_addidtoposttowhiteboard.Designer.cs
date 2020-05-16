@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VirtualWhiteboardAPI.Models.DataAccess;
 
 namespace VirtualWhiteboardAPI.Migrations
 {
     [DbContext(typeof(VirtualWhiteboardContext))]
-    partial class VirtualWhiteboardContextModelSnapshot : ModelSnapshot
+    [Migration("20200516104342_addidtoposttowhiteboard")]
+    partial class addidtoposttowhiteboard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

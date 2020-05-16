@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using VirtualWhiteboardAPI.Helpers;
 using VirtualWhiteboardAPI.Models;
 using VirtualWhiteboardAPI.Models.DataAccess;
 using VirtualWhiteboardAPI.Models.DTO.Team;
@@ -41,6 +44,18 @@ namespace VirtualWhiteboardAPI.Services
             }
 
             return true;
+        }
+
+        public Team Get(int id)
+        {
+            var team =  _context.Teams
+                .Include(t => t.Whiteboard)
+                .FirstOrDefault(t => t.Id == id);
+            if(team == null)
+            {
+                throw new MyAPIException(HttpStatusCode.BadRequest, "The team could not be found");
+            }
+            return team;
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace VirtualWhiteboardAPI.Models
 {
     public class User

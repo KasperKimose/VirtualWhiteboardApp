@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -86,17 +87,17 @@ namespace VirtualWhiteboardAPI.Services
                 if (user.Password.Equals(hashedPw))
                 {
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var secret = Encoding.ASCII.GetBytes(_appSettings.JWTSecret);
-                    var tokenDescripter = new SecurityTokenDescriptor
+                    var key = Encoding.ASCII.GetBytes(_appSettings.JWTSecret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new Claim[]
                         {
-                    new Claim(ClaimTypes.Email, user.Email),
+                            new Claim(ClaimTypes.Email, userDTO.Email)
                         }),
-                        Expires = DateTime.UtcNow.AddDays(1),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                     };
-                    var token = tokenHandler.CreateToken(tokenDescripter);
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
                     return tokenHandler.WriteToken(token);
                 }
             }
@@ -104,13 +105,15 @@ namespace VirtualWhiteboardAPI.Services
 
         }
 
-        public UserDTO Get(string email)
+        public User Get(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email.Equals(email));
-            return _mapperService.Map(user);
+            var user = _context.Users
+                .Include(u => u.MemberOf)
+                .FirstOrDefault(u => u.Email.Equals(email));
+            return user;
         }
 
-        public UserDTO GetUserByClaims(IEnumerable<Claim> claims)
+        public User GetUserByClaims(IEnumerable<Claim> claims)
         {
             var emailClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
             if (emailClaim == null) throw new MyAPIException(HttpStatusCode.Unauthorized, "The token is invalid!");

@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200516101101_UpdatesPostToUseForeignkey.cs" />
+    <Compile Remove="Migrations\20200516101101_UpdatesPostToUseForeignkey.Designer.cs" />
+    <Compile Remove="Migrations\20200516101744_Updatespoststovirtual.cs" />
+    <Compile Remove="Migrations\20200516101744_Updatespoststovirtual.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4">

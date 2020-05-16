@@ -10,10 +10,12 @@ namespace VirtualWhiteboardAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IMapperService _mapperService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IMapperService mapperService)
         {
             _accountService = accountService;
+            _mapperService = mapperService;
         }
 
         [HttpPost("Login")]
@@ -33,7 +35,7 @@ namespace VirtualWhiteboardAPI.Controllers
             if (_accountService.RegisterUser(userDTO))
             {
                 var user = _accountService.Get(userDTO.Email);
-                return Created("User is created", user);
+                return Created("User is created", _mapperService.Map(user));
             }
             return BadRequest("User could not be created");
         }

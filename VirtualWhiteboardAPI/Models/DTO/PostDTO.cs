@@ -7,6 +7,7 @@ namespace VirtualWhiteboardAPI.Models.DTO
 {
     public class PostDTO
     {
+        public int WhiteboardId { get; set; }
         public string Content { get; set; }
     }
 }

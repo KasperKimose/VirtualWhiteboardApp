@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VirtualWhiteboardAPI.Models.DataAccess;
 
 namespace VirtualWhiteboardAPI.Migrations
 {
     [DbContext(typeof(VirtualWhiteboardContext))]
-    partial class VirtualWhiteboardContextModelSnapshot : ModelSnapshot
+    [Migration("20200516101053_UpdatesUserToHoldPosts")]
+    partial class UpdatesUserToHoldPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,14 +37,14 @@ namespace VirtualWhiteboardAPI.Migrations
                     b.Property<int?>("PostedBy_Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PostedOn_Id")
+                    b.Property<int?>("WhiteboardId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostedBy_Id");
 
-                    b.HasIndex("PostedOn_Id");
+                    b.HasIndex("WhiteboardId");
 
                     b.ToTable("Posts");
                 });
@@ -114,12 +116,12 @@ namespace VirtualWhiteboardAPI.Migrations
             modelBuilder.Entity("VirtualWhiteboardAPI.Models.Post", b =>
                 {
                     b.HasOne("VirtualWhiteboardAPI.Models.User", "PostedBy")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("PostedBy_Id");
 
-                    b.HasOne("VirtualWhiteboardAPI.Models.Whiteboard", "PostedOn")
+                    b.HasOne("VirtualWhiteboardAPI.Models.Whiteboard", null)
                         .WithMany("Posts")
-                        .HasForeignKey("PostedOn_Id");
+                        .HasForeignKey("WhiteboardId");
                 });
 
             modelBuilder.Entity("VirtualWhiteboardAPI.Models.Team", b =>

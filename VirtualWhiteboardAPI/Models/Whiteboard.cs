@@ -8,6 +8,6 @@ namespace VirtualWhiteboardAPI.Models
     public class Whiteboard
     {
         public int Id { get; set; }
-        public IEnumerable<Post> Posts { get; set; }
+        public ICollection<Post> Posts { get; set; }
     }
 }
