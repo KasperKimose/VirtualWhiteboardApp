@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using VirtualWhiteboardAPI.Models;
 using VirtualWhiteboardAPI.Models.DataAccess;
-using VirtualWhiteboardAPI.Models.DTO;
+using VirtualWhiteboardAPI.Models.DTO.Post;
 
 namespace VirtualWhiteboardAPI.Services
 {
@@ -28,7 +28,21 @@ namespace VirtualWhiteboardAPI.Services
             _teamService = teamService;
         }
 
-        public Post CreatePost(IEnumerable<Claim> claims, PostDTO postDTO)
+        public IEnumerable<Post> Get(IEnumerable<Claim> claims)
+        {
+            var user = _accountService.GetUserByClaims(claims);
+            var team = _teamService.Get(user.MemberOf.Id);
+            return Get(team.Whiteboard.Id).Posts;
+        }
+
+        public Whiteboard Get(int id)
+        {
+            return _context.Whiteboards
+                .Include(w => w.Posts)
+                .FirstOrDefault(w => w.Id == id);
+        }
+
+        public Post CreatePost(IEnumerable<Claim> claims, CreatePostDTO postDTO)
         {
             var user = _accountService.GetUserByClaims(claims);
             var team = _teamService.Get(user.MemberOf.Id);

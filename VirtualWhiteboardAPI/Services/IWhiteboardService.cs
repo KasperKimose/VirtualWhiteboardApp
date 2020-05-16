@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using VirtualWhiteboardAPI.Models;
-using VirtualWhiteboardAPI.Models.DTO;
+using VirtualWhiteboardAPI.Models.DTO.Post;
 
 namespace VirtualWhiteboardAPI.Services
 {
     public interface IWhiteboardService
     {
-        Post CreatePost(IEnumerable<Claim> claims, PostDTO postDTO);
+        IEnumerable<Post> Get(IEnumerable<Claim> claims);
+        Post CreatePost(IEnumerable<Claim> claims, CreatePostDTO postDTO);
     }
 }

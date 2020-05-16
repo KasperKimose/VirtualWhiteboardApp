@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VirtualWhiteboardAPI.Models.DTO;
+using VirtualWhiteboardAPI.Models.DTO.Post;
 using VirtualWhiteboardAPI.Services;
 
 namespace VirtualWhiteboardAPI.Controllers
@@ -17,14 +11,23 @@ namespace VirtualWhiteboardAPI.Controllers
     public class WhiteboardController : ControllerBase
     {
         private readonly IWhiteboardService _whiteboardService;
+        private readonly IMapperService _mapperService;
 
-        public WhiteboardController(IWhiteboardService whiteboardService)
+        public WhiteboardController(IWhiteboardService whiteboardService, IMapperService mapperService)
         {
             _whiteboardService = whiteboardService;
+            _mapperService = mapperService;
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var posts = _whiteboardService.Get(User.Claims);
+            return Ok(_mapperService.Map(posts));
         }
 
         [HttpPost]
-        public IActionResult Post(PostDTO postDTO)
+        public IActionResult Post(CreatePostDTO postDTO)
         {
             var post = _whiteboardService.CreatePost(User.Claims, postDTO);
             return Ok(post.Id);

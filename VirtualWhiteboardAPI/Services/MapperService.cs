@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtualWhiteboardAPI.Models;
+using VirtualWhiteboardAPI.Models.DTO.Post;
 using VirtualWhiteboardAPI.Models.DTO.User;
 
 namespace VirtualWhiteboardAPI.Services
@@ -28,6 +29,16 @@ namespace VirtualWhiteboardAPI.Services
                 LastName = userDTO.LastName,
                 Email = userDTO.Email
             };
+        }
+
+        public PostDTO Map(Post post)
+        {
+            return new PostDTO { };
+        }
+
+        public IEnumerable<PostDTO> Map(IEnumerable<Post> posts)
+        {
+            throw new NotImplementedException();
         }
     }
 }

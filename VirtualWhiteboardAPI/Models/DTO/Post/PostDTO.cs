@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VirtualWhiteboardAPI.Models.DTO
+namespace VirtualWhiteboardAPI.Models.DTO.Post
 {
     public class PostDTO
     {
-        public int WhiteboardId { get; set; }
-        public string Content { get; set; }
     }
 }
