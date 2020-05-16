@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,23 @@ namespace VirtualWhiteboardAPI
                 };
             });
 
+            // Setup Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "VirtualWhiteboard API",
+                    Description = "An API For the CIC Hiring test ",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Kasper Kimose",
+                        Email = "kasper@kimose-rasmussen.dk",
+                        Url = new Uri("https://github.com/KasperKimose/"),
+                    },
+                });
+            });
+
             services.AddControllers();
 
         }
@@ -70,6 +88,13 @@ namespace VirtualWhiteboardAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "VirtualWhiteboard API V1");
+                c.RoutePrefix = "swagger"; ;
+            });
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
