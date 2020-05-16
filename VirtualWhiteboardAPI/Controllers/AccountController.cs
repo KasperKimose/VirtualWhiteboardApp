@@ -19,10 +19,6 @@ namespace VirtualWhiteboardAPI.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginUserDTO userDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var token = _accountService.Login(userDTO);
             if(token != null)
             {

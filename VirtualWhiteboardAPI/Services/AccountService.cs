@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -45,17 +46,16 @@ namespace VirtualWhiteboardAPI.Services
         {
             if (_context.Users.Any(u => u.Email.Equals(userDTO.Email)))
             {
-                //todo: throw apiexception
-                return false;
+                throw new MyAPIException(HttpStatusCode.BadRequest, "The user already exists");
             }
             if(!userDTO.Password.Equals(userDTO.ConfirmPassword))
             {
-                return false;
+                throw new MyAPIException(HttpStatusCode.BadRequest, "The passwors does not match");
             }
             var team = _context.Teams.FirstOrDefault(t => t.Id == userDTO.TeamId);
             if (team == null)
             {
-                return false;
+                throw new MyAPIException(HttpStatusCode.BadRequest, $"The team with id, {userDTO.TeamId} does not exist");
             }
 
             var salt = GenerateSalt();
@@ -72,7 +72,7 @@ namespace VirtualWhiteboardAPI.Services
             _context.Users.Add(user);
             if (_context.SaveChanges() == 0)
             {
-                return false;
+                throw new MyAPIException(HttpStatusCode.InternalServerError, "Something went wrong saving the user, please try again in a moment");
             }
             return true;
         }
@@ -100,13 +100,25 @@ namespace VirtualWhiteboardAPI.Services
                     return tokenHandler.WriteToken(token);
                 }
             }
-            return null;
+            throw new MyAPIException(HttpStatusCode.Unauthorized, "username and password does not match");
+
         }
 
         public UserDTO Get(string email)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email.Equals(email));
             return _mapperService.Map(user);
+        }
+
+        public UserDTO GetUserByClaims(IEnumerable<Claim> claims)
+        {
+            var emailClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+            if (emailClaim == null) throw new MyAPIException(HttpStatusCode.Unauthorized, "The token is invalid!");
+
+            var user = Get(emailClaim.Value);
+            if (user == null) throw new MyAPIException(HttpStatusCode.BadRequest, "The user could not be found");
+
+            return user;
         }
 
         private string GenerateSalt()
