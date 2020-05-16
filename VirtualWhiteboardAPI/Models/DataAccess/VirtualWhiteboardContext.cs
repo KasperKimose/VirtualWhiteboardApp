@@ -10,7 +10,8 @@ namespace VirtualWhiteboardAPI.Models.DataAccess
         }
 
         public DbSet<Team> Teams { get; set; }
-        public DbSet<Person> Members { get; set; }
+        public DbSet<Person> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Whiteboard> Whiteboards { get; set; }
     }
 }
