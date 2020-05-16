@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using VirtualWhiteboardAPI.Models.DTO.Team;
 
 namespace VirtualWhiteboardAPI.Services
 {
     public interface ITeamService
     {
+        bool Create(CreateTeamDTO teamDTO);
     }
 }

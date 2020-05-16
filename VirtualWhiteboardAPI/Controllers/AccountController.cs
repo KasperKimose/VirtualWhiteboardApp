@@ -19,6 +19,10 @@ namespace VirtualWhiteboardAPI.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginUserDTO userDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var token = _accountService.Login(userDTO);
             if(token != null)
             {
@@ -32,7 +36,8 @@ namespace VirtualWhiteboardAPI.Controllers
         {
             if (_accountService.RegisterUser(userDTO))
             {
-                return Created("User is created", userDTO);
+                var user = _accountService.Get(userDTO.Email);
+                return Created("User is created", user);
             }
             return BadRequest("User could not be created");
         }

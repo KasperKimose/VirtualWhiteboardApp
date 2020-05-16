@@ -21,13 +21,21 @@ namespace VirtualWhiteboardAPI.Services
         private readonly VirtualWhiteboardContext _context;
         private readonly AppSettings _appSettings;
 
+        private readonly IMapperService _mapperService;
+
         private readonly SHA256Managed _hasher;
         private readonly RNGCryptoServiceProvider _rngCsp;
 
-        public AccountService(VirtualWhiteboardContext context, IOptions<AppSettings> options)
+        public AccountService(
+            VirtualWhiteboardContext context, 
+            IOptions<AppSettings> options,
+            IMapperService mapperService
+            )
         {
             _context = context;
             _appSettings = options.Value;
+
+            _mapperService = mapperService;
 
             _hasher = new SHA256Managed();
             _rngCsp = new RNGCryptoServiceProvider();
@@ -35,7 +43,7 @@ namespace VirtualWhiteboardAPI.Services
 
         public bool RegisterUser(RegisterUserDTO userDTO)
         {
-            if(!_context.Users.Any(u => u.Email == userDTO.Email))
+            if (_context.Users.Any(u => u.Email.Equals(userDTO.Email)))
             {
                 //todo: throw apiexception
                 return false;
@@ -95,6 +103,12 @@ namespace VirtualWhiteboardAPI.Services
             return null;
         }
 
+        public UserDTO Get(string email)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email.Equals(email));
+            return _mapperService.Map(user);
+        }
+
         private string GenerateSalt()
         {
             var byteArr = new byte[256];
@@ -114,7 +128,5 @@ namespace VirtualWhiteboardAPI.Services
         {
             return name.Trim('<', '>', '{', '}');
         }
-
-       
     }
 }

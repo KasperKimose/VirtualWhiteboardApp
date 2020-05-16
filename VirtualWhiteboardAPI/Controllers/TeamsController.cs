@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using VirtualWhiteboardAPI.Models.DTO.Team;
 using VirtualWhiteboardAPI.Services;
 
 namespace VirtualWhiteboardAPI.Controllers
@@ -14,5 +11,19 @@ namespace VirtualWhiteboardAPI.Controllers
     {
         private readonly ITeamService _teamService;
 
+        public TeamsController(ITeamService teamService)
+        {
+            _teamService = teamService;
+        }
+
+        [HttpPost]
+        public IActionResult CreateTeam(CreateTeamDTO teamDTO)
+        {
+            if (!_teamService.Create(teamDTO))
+            {
+                return BadRequest("The team could not be created");
+            }
+            return Ok();
+        }
     }
 }

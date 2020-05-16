@@ -32,6 +32,7 @@ namespace VirtualWhiteboardAPI
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<IMapperService, MapperService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
