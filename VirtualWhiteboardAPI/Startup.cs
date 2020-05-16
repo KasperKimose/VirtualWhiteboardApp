@@ -31,6 +31,7 @@ namespace VirtualWhiteboardAPI
                 options.UseSqlServer(Configuration.GetConnectionString("VWContext")));
 
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITeamService, TeamService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
