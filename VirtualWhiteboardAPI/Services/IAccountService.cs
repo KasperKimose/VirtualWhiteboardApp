@@ -14,5 +14,6 @@ namespace VirtualWhiteboardAPI.Services
         string Login(LoginUserDTO userDTO);
         User Get(string email);
         User GetUserByClaims(IEnumerable<Claim> claims);
+        User UpdatePassword(IEnumerable<Claim> claims, UpdateUserDTO userDTO);
     }
 }

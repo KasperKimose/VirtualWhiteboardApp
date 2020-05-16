@@ -124,6 +124,26 @@ namespace VirtualWhiteboardAPI.Services
             return user;
         }
 
+        public User UpdatePassword(IEnumerable<Claim> claims, UpdateUserDTO userDTO)
+        {
+            var user = GetUserByClaims(claims);
+
+            var hashedPw = Hash(userDTO.OldPassword + user.Salt);
+            if (!user.Password.Equals(hashedPw))
+            {
+                throw new MyAPIException(HttpStatusCode.BadRequest, "Wrong password");
+            }
+            if (!userDTO.Password.Equals(userDTO.ConfirmPassword))
+            {
+                throw new MyAPIException(HttpStatusCode.BadRequest, "The passwors does not match");
+            }
+            var hashedPassword = Hash(userDTO.Password + user.Salt);
+            user.Password = hashedPassword;
+
+            _context.SaveChanges();
+            return user;
+        }
+
         private string GenerateSalt()
         {
             var byteArr = new byte[256];
